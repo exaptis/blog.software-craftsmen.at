@@ -1,0 +1,48 @@
+// Gradle script from https://github.com/jsr377/site
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+          url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+      classpath 'org.jbake:jbake-core:2.3.2'
+      classpath 'org.asciidoctor:asciidoctorj:1.5.2'
+      classpath 'org.pegdown:pegdown:1.6.0' // enable Markdown support
+      classpath 'org.thymeleaf:thymeleaf:2.1.4.RELEASE'
+      classpath 'org.thymeleaf.extras:thymeleaf-extras-conditionalcomments:2.1.1.RELEASE'
+    }
+}
+
+plugins {
+  id "base"
+  id "org.ajoberstar.github-pages" version "1.4.2"
+  id "com.github.ben-manes.versions" version "0.12.0"
+  id "jetty"
+  id "me.champeau.jbake" version "0.2"
+}
+
+jbake {
+    configuration['asciidoctor.attributes.export'] = true
+    configuration['asciidoctor.attributes.export.prefix'] = 'jbake-'
+    configuration['project-build-dir'] = project.buildDir.absolutePath
+}
+build.dependsOn("jbake")
+
+jettyRun {
+    contextPath = ''
+    webAppSourceDirectory = file(jbake.output)
+}
+
+task(siteRun, dependsOn: ['build', 'jettyRun']) { }
+
+githubPages {
+  repoUri = 'git@github.com:SoftwareCraftsman/blog.software-craftsmen.at.git'
+  pages {
+    from jbake.outputs.files
+  }
+}
+
+prepareGhPages.dependsOn(build)

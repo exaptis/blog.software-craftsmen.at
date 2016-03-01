@@ -1,0 +1,22 @@
+= README
+
+== Building the project
+
+[source, bash]
+--
+gradlew --no-daemon clean build <1>
+--
+<1> Due to https://github.com/jbake-org/jbake-gradle-plugin/issues/14[issue-14] the Gradle daemon has to be disabled. This should be fixed with JBake 2.5.
+
+
+== Using live preview
+
+To watch file modifications run `gradlew -t build`. For serving the site content run `gradlew jettyRun` and the site will be available from http://localhost:8080[`http://localhost:8080`].
+
+== Publish to GitHub Pages
+
+[source, bash]
+--
+gradlew --no-daemon publishGhPages  <1>
+--
+<1> Due to https://github.com/jbake-org/jbake-gradle-plugin/issues/14[issue-14] the Gradle daemon has to be disabled. This should be fixed with JBake 2.5.
