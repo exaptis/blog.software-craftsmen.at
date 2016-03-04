@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 	    <meta charset="utf-8" />
-	    <title>Third Post</title>
+	    <title>Post With Code</title>
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	    <meta name="description" content="" />
 	    <meta name="author" content="" />
@@ -19,7 +19,7 @@
 	
 	    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 	    <!--[if lt IE 9]>
-	      <script th:with="rootpath=(${content.rootpath != null} ? ${content.rootpath} : '')" th:src="${rootpath}+'js/html5shiv.min.js'"></script>
+	      <script src="../../js/html5shiv.min.js"></script>
 	    <![endif]-->
 	
 	    <!-- Fav and touch icons -->
@@ -71,10 +71,10 @@
 		<div class="container">
 	
 			<div class="page-header">
-				<h1>Third Post</h1>
+				<h1>Post With Code</h1>
 			</div>
 		
-			<p><em>26 September 2013</em></p>
+			<p><em>04 March 2016</em></p>
 		
 			<p><div class="paragraph">
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vel diam purus. Curabitur ut nisi lacus.</p>
@@ -97,6 +97,48 @@ ligula vehicula et iaculis sem placerat. Fusce dictum, metus at volutpat lacinia
 id auctor arcu enim eu augue. Donec ultrices turpis in mi imperdiet ac venenatis sapien sodales. In
 consequat imperdiet nunc quis bibendum. Nulla semper, erat quis ornare tristique, lectus massa posuere
 libero, ut vehicula lectus nunc ut lorem. Aliquam erat volutpat.</p>
+</div>
+<div class="listingblock">
+<div class="title">Java</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">package at.martinahrer.config;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.config.server.EnableConfigServer;
+
+@SpringBootApplication <b class="conum">(1)</b>
+@EnableConfigServer <b class="conum">(2)</b>
+public class ConfigServerApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(ConfigServerApplication.class, args);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Enables Spring Boot auto-detection</p>
+</li>
+<li>
+<p>This enables the embedded config server</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="title">Shell</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">if [ -f bitbucket.properties ]; then
+  if [ ! -f $BITBUCKET_HOME/shared/bitbucket.properties ]; then
+    if [ -z ${BITBUCKET_LICENSE+x} ]; then
+      echo "BITBUCKET_LICENSE not set";
+    else
+      echo "setup.license=$BITBUCKET_LICENSE" &gt;&gt; bitbucket.properties;
+    fi
+  fi
+fi</code></pre>
+</div>
 </div></p>
 		
 			<hr />
@@ -108,7 +150,7 @@ libero, ut vehicula lectus nunc ut lorem. Aliquam erat volutpat.</p>
     
 		    <div id="footer">
 		      <div class="container">
-		        <p class="muted credit">&copy; 2014 | Mixed with <a href="http://getbootstrap.com/" shape="rect">Bootstrap v3.1.1</a> | Baked with <a href="http://jbake.org" shape="rect">JBake <span>v2.3.2</span></a></p>
+		        <p class="muted credit">&copy; 2014 | Mixed with <a href="http://getbootstrap.com/" shape="rect">Bootstrap v3.1.1</a> | Baked with <a href="http://jbake.org" shape="rect">JBake <span>v2.4.0</span></a></p>
 		      </div>
 		    </div>
 	    
