@@ -42,6 +42,9 @@ githubPages {
   repoUri = 'git@github.com:SoftwareCraftsman/blog.software-craftsmen.at.git'
   pages {
     from jbake.outputs.files
+    from ("$projectDir/src/jbake/content") {
+      include 'CNAME'
+    }
   }
 }
 
