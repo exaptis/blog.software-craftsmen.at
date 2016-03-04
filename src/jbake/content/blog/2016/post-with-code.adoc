@@ -2,7 +2,7 @@
 Martin Ahrer <martin.ahrer@software-craftsmen.at>
 2016-03-04
 :jbake-type: post
-:jbake-status: draft
+:jbake-status: published
 :jbake-tags: java, asciidoc
 :idprefix:
 
