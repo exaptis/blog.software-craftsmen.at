@@ -73,7 +73,74 @@
 				<h1>Blog</h1>
 			</div>
 			
-			
+			<div>
+				<a href="blog/2016/post-with-code.html" shape="rect"><h1>Post With Code</h1></a>
+				<p>04 March 2016</p>
+				<p><div class="paragraph">
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vel diam purus. Curabitur ut nisi lacus.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://example.org" class="bare">http://example.org</a></p>
+</li>
+<li>
+<p><a href="http://example.org">Example.org</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Nam id nisl quam. Donec a lorem sit amet libero pretium vulputate vel ut purus. Suspendisse leo arcu,
+mattis et imperdiet luctus, pulvinar vitae mi. Quisque fermentum sollicitudin feugiat. Mauris nec leo
+ligula. Vestibulum tristique odio ut risus ultricies a hendrerit quam iaculis. Duis tempor elit sit amet
+ligula vehicula et iaculis sem placerat. Fusce dictum, metus at volutpat lacinia, elit massa auctor risus,
+id auctor arcu enim eu augue. Donec ultrices turpis in mi imperdiet ac venenatis sapien sodales. In
+consequat imperdiet nunc quis bibendum. Nulla semper, erat quis ornare tristique, lectus massa posuere
+libero, ut vehicula lectus nunc ut lorem. Aliquam erat volutpat.</p>
+</div>
+<div class="listingblock">
+<div class="title">Java</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">package at.martinahrer.config;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.config.server.EnableConfigServer;
+
+@SpringBootApplication <b class="conum">(1)</b>
+@EnableConfigServer <b class="conum">(2)</b>
+public class ConfigServerApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(ConfigServerApplication.class, args);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Enables Spring Boot auto-detection</p>
+</li>
+<li>
+<p>This enables the embedded config server</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="title">Shell</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">if [ -f bitbucket.properties ]; then
+  if [ ! -f $BITBUCKET_HOME/shared/bitbucket.properties ]; then
+    if [ -z ${BITBUCKET_LICENSE+x} ]; then
+      echo "BITBUCKET_LICENSE not set";
+    else
+      echo "setup.license=$BITBUCKET_LICENSE" &gt;&gt; bitbucket.properties;
+    fi
+  fi
+fi</code></pre>
+</div>
+</div></p>
+			</div>
 				
 			<hr />
 			

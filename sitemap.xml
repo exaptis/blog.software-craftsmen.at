@@ -3,4 +3,8 @@
         <loc>http://jbake.org/about.html</loc>
         <lastmod>2013-09-24</lastmod>
     </url>
+    <url>
+        <loc>http://jbake.org/blog/2016/post-with-code.html</loc>
+        <lastmod>2016-03-04</lastmod>
+    </url>
 </urlset>
