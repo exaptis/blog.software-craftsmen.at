@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-      classpath 'org.jbake:jbake-core:2.3.2'
+      classpath 'org.jbake:jbake-core:2.4.0'
       classpath 'org.asciidoctor:asciidoctorj:1.5.2'
       classpath 'org.pegdown:pegdown:1.6.0' // enable Markdown support
       classpath 'org.thymeleaf:thymeleaf:2.1.4.RELEASE'
