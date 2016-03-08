@@ -5,8 +5,8 @@
     <atom:link href="http://jbake.org/feed.xml" rel="self" type="application/rss+xml"></atom:link>
     <description>JBake Bootstrap Template</description>
     <language>en-gb</language>
-    <pubDate>Tue, 8 Mar 2016 19:44:34 +0100</pubDate>
-    <lastBuildDate>Tue, 8 Mar 2016 19:44:34 +0100</lastBuildDate>
+    <pubDate>Tue, 8 Mar 2016 19:45:28 +0100</pubDate>
+    <lastBuildDate>Tue, 8 Mar 2016 19:45:28 +0100</lastBuildDate>
 
     <item>
       <title>Bean Mapping of Transfer Objects</title>
@@ -14,7 +14,7 @@
       <pubDate>Tue, 8 Mar 2016 00:00:00 +0100</pubDate>
       <guid isPermaLink="false">blog/2016/mapping.html</guid>
       <description>&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
-&amp;lt;p&amp;gt;In the past year I have been working on multiple projects where the so-called &amp;lt;strong&amp;gt;Data Transfer Object&amp;lt;/strong&amp;gt;
+&amp;lt;p&amp;gt;In the past years I have been working on multiple projects where the so-called &amp;lt;strong&amp;gt;Data Transfer Object&amp;lt;/strong&amp;gt;
 (short DTO) pattern has been heavily used. This is a pattern that has even been a &amp;lt;a href=&amp;quot;http://www.oracle.com/technetwork/java/transferobject-139757.html&amp;quot;&amp;gt;core pattern&amp;lt;/a&amp;gt; in the
 JEE world.
 This pattern certainly has its justification for the right cases. But in many cases I have seen
