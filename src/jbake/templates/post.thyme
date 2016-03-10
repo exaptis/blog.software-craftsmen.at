@@ -6,17 +6,23 @@
 	<div id="wrap">
 		<div th:replace="menu.thyme::menu"/>
 		<div class="container">
-	
+
 			<div class="page-header">
 				<h1 th:text='${content.title}'>title</h1>
 			</div>
-		
-			<p><em th:text='${#dates.format(content.date,"dd MMMM yyyy")}'>date</em></p>
-		
+
+			<p><em th:text='${#dates.format(content.date,"dd MMMM yyyy")}'>date</em>, <em th:text='${content.author}'>author</em></p>
+
 			<p th:utext='${content.body}'>body</p>
-		
+
+			<p>
+				<div th:each="tag: ${content.tags}">
+					<a th:href='${content.rootpath+"/"+config.tag_path+"/"+tag+".html"}' href='href'><span class="label label-primary" th:text='${tag}'>tag</span></a>
+				</div>
+			</p>
+
 			<hr />
-			
+
 		</div>
 	</div>
 	<div th:replace="footer.thyme::footer"></div>
