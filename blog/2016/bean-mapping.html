@@ -248,11 +248,16 @@ Next up, we have to get some numbers and arm our arguments towards non-reflectio
 </div>
 <div class="paragraph">
 <p>As I don&#8217;t want to pick on any of the Reflection API based frameworks I don&#8217;t publish the results here.
-I suggest that you checkout the project at <a href="https://github.com/SoftwareCraftsman/beanmapping">GitHub</a> und get your numbers yourself.</p>
+I suggest that you checkout the project at <a href="https://github.com/SoftwareCraftsman/beanmapping">GitHub</a> und get your numbers yourself.
+ Obviously the solution based on explicit mapping code will outperform their Reflection API based sisters - that should come with no surprise.</p>
 </div>
 <div class="paragraph">
-<p>Obviously the solution based on explicit mapping code will outperform their Reflection API based sisters - that should come with no surprise.
-Also, the results from this should not be an argument towards blindly applying the DTO pattern.</p>
+<p>This blog post was intended to highlight that mapping and especially mapping frameworks based on Reflection are adding to the processing time.
+This does not necessarily mean that mapping automatically is a target for optimization.
+On a case basis we have to judge if mapping takes a significant time from the overall processing time for a request or if we just can disregard it.</p>
+</div>
+<div class="paragraph">
+<p>Also, the results from this post should be an argument towards not blindly applying the DTO pattern.</p>
 </div></p>
 		
 			<hr />
