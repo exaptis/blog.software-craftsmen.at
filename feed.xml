@@ -1,0 +1,202 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Software Craftsmen GmbH &amp; Co KG</title>
+    <link>https://blog.software-craftsmen.at</link>
+    <atom:link href="https://blog.software-craftsmen.at/feed.xml" rel="self" type="application/rss+xml"></atom:link>
+    <description>Software Craftsmen GmbH &amp; Co KG team blog</description>
+    <language>en-gb</language>
+    <pubDate>Thu, 10 Mar 2016 13:48:37 +0100</pubDate>
+    <lastBuildDate>Thu, 10 Mar 2016 13:48:37 +0100</lastBuildDate>
+
+    <item>
+      <title>Bean Mapping of Transfer Objects</title>
+      <link>https://blog.software-craftsmen.at/blog/2016/bean-mapping.html</link>
+      <pubDate>Tue, 8 Mar 2016 00:00:00 +0100</pubDate>
+      <guid isPermaLink="false">blog/2016/bean-mapping.html</guid>
+      <description>&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;In the past years I have been working on multiple projects where the so-called &amp;lt;strong&amp;gt;Data Transfer Object&amp;lt;/strong&amp;gt;
+(short DTO) pattern has been heavily used. This is a pattern that has even been a &amp;lt;a href=&amp;quot;http://www.oracle.com/technetwork/java/transferobject-139757.html&amp;quot;&amp;gt;core pattern&amp;lt;/a&amp;gt; in the
+JEE world.
+This pattern certainly has its justification for the right cases. But in many cases I have seen
+it applied inappropriately. This &amp;lt;a href=&amp;quot;http://www.adam-bien.com/roller/abien/entry/dto_the_exceptions_from_the&amp;quot;&amp;gt;blog posting&amp;lt;/a&amp;gt; by Adam Bien, a JEE advocate, is outlining the case where it should be considered useful.
+However when applied, this pattern comes at the cost of additional code to maintain and some extra CPU cycles for doing the mapping.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;In this post we take a brief look at some mapping frameworks (just enough to do simple bean mapping). Finally we do some simple benchmarking just
+to get an idea what the performance costs of bean mapping are.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Below we see a typical implementation of mapping two objects. It becomes quite evident that every time we add/remove an attribute to the source or target object we need to update the mapping implementation.
+So a complex domain model and over-use of the mapping pattern can keep a developer fairly busy.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;title&amp;quot;&amp;gt;A hand crafted bean mapping implementation&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;prettyprint highlight&amp;quot;&amp;gt;&amp;lt;code class=&amp;quot;language-java&amp;quot; data-lang=&amp;quot;java&amp;quot;&amp;gt;public class PersonNameMapperImpl implements PersonNameMapper {
+
+    @Override
+    public PersonNameResource map(PersonName person) {
+        if ( person == null ) {
+            return null;
+        }
+
+        PersonNameResource personNameResource = new PersonNameResource();
+
+        personNameResource.setNamePrefix( person.getNamePrefix() );
+        personNameResource.setFirstName( person.getFirstName() );
+        personNameResource.setLastName( person.getLastName() );
+        personNameResource.setMiddleName( person.getMiddleName() );
+
+        return personNameResource;
+    }
+}&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;As a workaround quite a number of mapping frameworks have been put into life.
+They mostly work based on heavy use of the Java Reflection API in order to dynamically map between two objects (or even complex object networks).
+These frameworks let us describe the rules for mapping and/or rely on sensible defaults for deriving a mapping (e.g. based on name matching).&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;The most popular frameworks are probably &amp;lt;a href=&amp;quot;http://dozer.sourceforge.net/documentation/about.html&amp;quot;&amp;gt;Dozer&amp;lt;/a&amp;gt; or &amp;lt;a href=&amp;quot;http://modelmapper.org/&amp;quot;&amp;gt;Model Mapper&amp;lt;/a&amp;gt;.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;title&amp;quot;&amp;gt;Bean mapping based on Dozer&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;prettyprint highlight&amp;quot;&amp;gt;&amp;lt;code class=&amp;quot;language-java&amp;quot; data-lang=&amp;quot;java&amp;quot;&amp;gt;PersonName name = new PersonNameFactory().newEntity();
+Mapper dozerMapper = new DozerBeanMapper();
+dozerMapper.map(name, PersonNameResource.class);&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;The above mapping code using Dozer simply uses name matching for generating property mapping rules using the Reflection API.
+It is quite evident that it is required to have good test coverage for such code to ensure that all properties are properly mapped.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;title&amp;quot;&amp;gt;Bean mapping based on ModelMapper&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;prettyprint highlight&amp;quot;&amp;gt;&amp;lt;code class=&amp;quot;language-java&amp;quot; data-lang=&amp;quot;java&amp;quot;&amp;gt;PersonName name = new PersonNameFactory().newEntity();
+ModelMapper modelMapper = new ModelMapper();
+modelMapper.map(name, PersonNameResource.class);&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Using ModelMapper the code is almost identical. Most of the well established mapping frameworks are doing
+an excellent job providing their mapping capabilities. Certainly they differ in the way the are configured through
+an API and/or annotations (or even XML). So choosing may be just a matter of taste.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;During one of my last project assignments I had an argument with a colleague. The more mapping code we had implemented the more I felt uneasy.
+Yes, I had a pretty old development workstation with a CPU not as powerful compared to my team mates.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;I started arguing that we are putting a lot of work into code for configuring the mapping framework and it was hard to debug (It&amp;amp;#8217;s all Reflection code you need to work through when debugging).
+But also with my poor hardware I was experiencing that automated tests would run quite slow (and extremely slow when in debugger mode) and to me it was pretty clear that it&amp;amp;#8217;s the mapping framework.
+Granted, it definitely helped us to avoid writing tons of boring mapping code but I still feared that it would come at some performance cost.
+Though, having no reliable numbers for the execution costs, I knew it would be hard to find good arguments against the mapping framework we had chosen.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Today, the project is almost done, the mapping approach using &amp;lt;strong&amp;gt;ModelMapper&amp;lt;/strong&amp;gt; was continued. Still that questionable performance continued to puzzle me.
+So, a few days ago I sat down and setup a sample project to compare a few mapping frameworks and run some benchmarks.
+It is quite clear that a hand-crafted mapping code would outnumber any reflection based mapping implementation. Yet I have to admit
+that hand-crafted mapping code is not a viable option. The improvement in performance would be neutralized by unmaintainable code.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;So, first I did a research to find a mapping framework that would not use the Reflection API at runtime but rather generate the mapping code.
+I was successful and stumbled over a fairly new project: &amp;lt;a href=&amp;quot;http://mapstruct.org/&amp;quot;&amp;gt;mapstruct&amp;lt;/a&amp;gt;.
+It is still missing some features (like field access) and it has its problems with &amp;lt;a href=&amp;quot;https://projectlombok.org/&amp;quot;&amp;gt;Lombok&amp;lt;/a&amp;gt; (which we use for reducing boiler plate code).&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;title&amp;quot;&amp;gt;Bean mapping based on mapstruct&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;prettyprint highlight&amp;quot;&amp;gt;&amp;lt;code class=&amp;quot;language-java&amp;quot; data-lang=&amp;quot;java&amp;quot;&amp;gt;@Mapper
+public interface PersonNameMapper {
+    PersonNameMapper INSTANCE = Mappers.getMapper(PersonNameMapper.class);
+
+    PersonNameResource map(PersonName person);
+}&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Mapstruct works with an annotation processor (apt) to actually generate Java code for the mapping.
+As a developer you just declare the mapper interface, annotate it with &amp;lt;code&amp;gt;@Mapper&amp;lt;/code&amp;gt; and mapstruct generates the implementation based on an convention over configuration approach at compile time.
+The &amp;quot;hand-crafted&amp;quot; mapping code we saw earlier is in fact generated by mapstruct.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;prettyprint highlight&amp;quot;&amp;gt;&amp;lt;code class=&amp;quot;language-java&amp;quot; data-lang=&amp;quot;java&amp;quot;&amp;gt;PersonName name = new PersonNameFactory().newEntity();
+PersonNameMapper mapstructMapper = PersonNameMapper.INSTANCE;
+mapstructMapper.map(name);&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;So this aproach would get me the best of both worlds - good performance and no need to write mapping code.
+Next up, we have to get some numbers and arm our arguments towards non-reflection based mapping.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;The OpenJDK project has published their &amp;lt;a href=&amp;quot;http://openjdk.java.net/projects/code-tools/jmh/&amp;quot;&amp;gt;JMH micro-benchmarking&amp;lt;/a&amp;gt; framework which they use for their performance improvements.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;listingblock&amp;quot;&amp;gt;
+&amp;lt;div class=&amp;quot;title&amp;quot;&amp;gt;JMH benchmark&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;content&amp;quot;&amp;gt;
+&amp;lt;pre class=&amp;quot;prettyprint highlight&amp;quot;&amp;gt;&amp;lt;code class=&amp;quot;language-java&amp;quot; data-lang=&amp;quot;java&amp;quot;&amp;gt;public class PersonNameMappingBenchmark {
+
+    private static final PersonName name = new PersonNameFactory().newEntity();
+
+    private static final PersonNameMapper mapstructMapper = PersonNameMapper.INSTANCE;
+
+    @Benchmark
+    @BenchmarkMode(Mode.SampleTime)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
+    public void mapstruct() throws InterruptedException {
+        mapstructMapper.map(name);
+    }
+
+    private static ModelMapper modelMapper = new ModelMapper();
+
+    @Benchmark
+    @BenchmarkMode(Mode.SampleTime)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
+    public void modelmapper() throws InterruptedException {
+        modelMapper.map(name, PersonNameResource.class);
+    }
+
+    private static Mapper dozerMapper = new DozerBeanMapper();
+
+    @Benchmark
+    @BenchmarkMode(Mode.SampleTime)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
+    public void dozer() throws InterruptedException {
+        dozerMapper.map(name, PersonNameResource.class);
+    }
+
+    public static void main(String[] args) throws RunnerException {
+        Options opt = new OptionsBuilder()
+                .include(PersonNameMappingBenchmark.class.getSimpleName())
+                .warmupIterations(5)
+                .measurementIterations(5)
+                .forks(1)
+                .build();
+
+        new Runner(opt).run();
+    }
+}&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;As I don&amp;amp;#8217;t want to pick on any of the Reflection API based frameworks I don&amp;amp;#8217;t publish the results here.
+I suggest that you checkout the project at &amp;lt;a href=&amp;quot;https://github.com/SoftwareCraftsman/beanmapping&amp;quot;&amp;gt;GitHub&amp;lt;/a&amp;gt; und get your numbers yourself.
+ Obviously the solution based on explicit mapping code will outperform their Reflection API based sisters - that should come with no surprise.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;This blog post was intended to highlight that mapping and especially mapping frameworks based on Reflection are adding to the processing time.
+This does not necessarily mean that mapping automatically is a target for optimization.
+On a case basis we have to judge if mapping takes a significant time from the overall processing time for a request or if we just can disregard it.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&amp;quot;paragraph&amp;quot;&amp;gt;
+&amp;lt;p&amp;gt;Also, the results from this post should be an argument towards not blindly applying the DTO pattern.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;</description>
+    </item>
+
+  </channel>
+</rss>
